@@ -22,6 +22,7 @@ namespace Beer_Pub
 
         private async void Form1_Load(object sender, EventArgs e)
         {
+            
             // Connecting the database to the project
             string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\VS C++\Проэкты\Beer Pub\Beer Pub\Database.mdf;Integrated Security=True";
             sqlConnection = new SqlConnection(connectionString);
@@ -35,10 +36,21 @@ namespace Beer_Pub
             {
                 sqlReader = await command.ExecuteReaderAsync();
 
+                DataTable dt = new DataTable();
+                dt.Columns.Add("ID");
+                dt.Columns.Add("Name");
+                dt.Columns.Add("Price");
+
                 while (await sqlReader.ReadAsync())
                 {
-                    listBox1.Items.Add(Convert.ToString(sqlReader["ID"]) + "        " + Convert.ToString(sqlReader["Name"]) + "     " + Convert.ToString(sqlReader["Price"]));
+                    DataRow r = dt.NewRow();
+                    r["ID"] = Convert.ToString(sqlReader["ID"]);
+                    r["Name"] = Convert.ToString(sqlReader["Name"]);
+                    r["Price"] = Convert.ToString(sqlReader["Price"]);
+                    dt.Rows.Add(r);
                 }
+
+                dataGridView1.DataSource = dt;
             }
             catch(Exception ex)
             {
