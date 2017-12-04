@@ -36,21 +36,33 @@ namespace Beer_Pub
             {
                 sqlReader = await command.ExecuteReaderAsync();
 
+                // Required columns for the table
                 DataTable dt = new DataTable();
                 dt.Columns.Add("ID");
-                dt.Columns.Add("Name");
-                dt.Columns.Add("Price");
+                dt.Columns.Add("Продукт");
+                dt.Columns.Add("Объём");
+                dt.Columns.Add("Цена");
 
+                // Displaying Database Cells on the Screen
                 while (await sqlReader.ReadAsync())
                 {
                     DataRow r = dt.NewRow();
                     r["ID"] = Convert.ToString(sqlReader["ID"]);
-                    r["Name"] = Convert.ToString(sqlReader["Name"]);
-                    r["Price"] = Convert.ToString(sqlReader["Price"]);
+                    r["Продукт"] = Convert.ToString(sqlReader["Продукт"]);
+                    r["Объём"] = Convert.ToString(sqlReader["Объём"]);
+                    r["Цена"] = Convert.ToString(sqlReader["Цена"]);
                     dt.Rows.Add(r);
                 }
-
                 dataGridView1.DataSource = dt;
+
+                // Prohibition on sorting the columns of a table
+                foreach (DataGridViewColumn column in dataGridView1.Columns)
+                {
+                    column.SortMode = DataGridViewColumnSortMode.NotSortable;
+                }
+
+                // Allow edit column "Количество"
+                dataGridView1.Columns[4].ReadOnly = true;
             }
             catch(Exception ex)
             {
@@ -58,6 +70,7 @@ namespace Beer_Pub
             }
             finally
             {
+                // Close the flow
                 if (sqlReader != null)
                     sqlReader.Close();
             }
