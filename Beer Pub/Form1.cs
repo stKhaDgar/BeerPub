@@ -42,6 +42,7 @@ namespace Beer_Pub
                 dt.Columns.Add("Продукт");
                 dt.Columns.Add("Объём");
                 dt.Columns.Add("Цена");
+                int countRows = 1;
 
                 // Displaying Database Cells on the Screen
                 while (await sqlReader.ReadAsync())
@@ -52,8 +53,11 @@ namespace Beer_Pub
                     r["Объём"] = Convert.ToString(sqlReader["Объём"]);
                     r["Цена"] = Convert.ToString(sqlReader["Цена"]);
                     dt.Rows.Add(r);
+                    countRows++;
                 }
                 dataGridView1.DataSource = dt;
+                countRows *= 20;
+                tabPage1.AutoScrollMinSize = new System.Drawing.Size(0, countRows+7);
 
                 // Prohibition on sorting the columns of a table
                 foreach (DataGridViewColumn column in dataGridView1.Columns)
@@ -62,7 +66,7 @@ namespace Beer_Pub
                 }
 
                 // Allow edit column "Количество"
-                dataGridView1.Columns[4].ReadOnly = true;
+                dataGridView1.Columns[3].ReadOnly = true;
             }
             catch(Exception ex)
             {
