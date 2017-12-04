@@ -37,7 +37,7 @@ namespace Beer_Pub
 
                 while (await sqlReader.ReadAsync())
                 {
-                    listBox1.Items.Add(Convert.ToString(sqlReader["ID"]) + "  " + Convert.ToString(sqlReader["Name"]) + "  " + Convert.ToString(sqlReader["Price"]));
+                    listBox1.Items.Add(Convert.ToString(sqlReader["ID"]) + "        " + Convert.ToString(sqlReader["Name"]) + "     " + Convert.ToString(sqlReader["Price"]));
                 }
             }
             catch(Exception ex)
