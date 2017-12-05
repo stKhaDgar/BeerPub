@@ -53,9 +53,14 @@ namespace Beer_Pub
                     r["Объём"] = Convert.ToString(sqlReader["Объём"]);
                     r["Цена"] = Convert.ToString(sqlReader["Цена"]);
                     dt.Rows.Add(r);
+                    dataGridView2.Rows.Add();
                     countRows++;
                 }
-                dataGridView2.RowCount = countRows - 1; // Сколько необходимо строк во второй таблице
+                // Определение для второй таблицы
+                
+                dataGridView2.Columns[0].SortMode = DataGridViewColumnSortMode.NotSortable;
+                dataGridView2.Columns[1].SortMode = DataGridViewColumnSortMode.NotSortable;
+
                 dataGridView1.DataSource = dt;
                 countRows *= 20;
                 tabPage1.AutoScrollMinSize = new System.Drawing.Size(0, countRows+7);
@@ -95,6 +100,40 @@ namespace Beer_Pub
         {
             if (sqlConnection != null && sqlConnection.State != ConnectionState.Closed)
                 sqlConnection.Close();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            int countRow = 0;
+            foreach (DataGridViewRow row in dataGridView2.Rows)
+            {
+                double PriceNew = Convert.ToDouble(dataGridView1.Rows[countRow].Cells[3].Value.ToString());
+                    row.Cells[1].Value = PriceNew * Convert.ToDouble(row.Cells[0].Value.ToString());
+                countRow++;
+            }
+        }
+
+        // Необходимо для ввода только цифровых значений в 1 колонку второй таблицы
+        private void dataGridView2_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            if (dataGridView2.CurrentCell.ColumnIndex == 0)
+            {
+                TextBox tb = (TextBox)e.Control;
+                tb.KeyPress += new KeyPressEventHandler(tb_KeyPress);
+            }
+            else
+            {
+                TextBox tb = (TextBox)e.Control;
+                tb.KeyPress -= tb_KeyPress;
+            }
+        }
+        void tb_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if ((!Char.IsNumber(e.KeyChar) && (e.KeyChar != '-') && (e.KeyChar != ',')))
+            {
+                if ((e.KeyChar != (char)Keys.Back) || (e.KeyChar != (char)Keys.Delete))
+                { e.Handled = true; }
+            }
         }
     }
 }
