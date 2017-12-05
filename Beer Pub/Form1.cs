@@ -55,6 +55,7 @@ namespace Beer_Pub
                     dt.Rows.Add(r);
                     countRows++;
                 }
+                dataGridView2.RowCount = countRows - 1; // Сколько необходимо строк во второй таблице
                 dataGridView1.DataSource = dt;
                 countRows *= 20;
                 tabPage1.AutoScrollMinSize = new System.Drawing.Size(0, countRows+7);
@@ -63,10 +64,14 @@ namespace Beer_Pub
                 foreach (DataGridViewColumn column in dataGridView1.Columns)
                 {
                     column.SortMode = DataGridViewColumnSortMode.NotSortable;
+                    dataGridView1.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 }
 
-                // Allow edit column "Количество"
+                // Allow edit column
+                dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
                 dataGridView1.Columns[3].ReadOnly = true;
+                dataGridView1.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                dataGridView1.Columns[0].Width = 20;
             }
             catch(Exception ex)
             {
