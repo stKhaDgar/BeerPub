@@ -54,6 +54,7 @@ namespace Beer_Pub
                     r["Цена"] = Convert.ToString(sqlReader["Цена"]);
                     dt.Rows.Add(r);
                     dataGridView2.Rows.Add();
+                    dataGridView2.Rows[countRows - 1].Cells[0].Value = 0;
                     countRows++;
                 }
                 // Определение для второй таблицы
@@ -102,15 +103,21 @@ namespace Beer_Pub
                 sqlConnection.Close();
         }
 
+        // Срабатывает при нажатии на "Расчитать"
         private void button4_Click(object sender, EventArgs e)
         {
+            listBox1.Items.Clear();
             int countRow = 0;
             foreach (DataGridViewRow row in dataGridView2.Rows)
             {
-                double PriceNew = Convert.ToDouble(dataGridView1.Rows[countRow].Cells[3].Value.ToString());
+                if (Convert.ToDouble(row.Cells[0].Value.ToString()) != 0)
+                {
+                    double PriceNew = Convert.ToDouble(dataGridView1.Rows[countRow].Cells[3].Value.ToString());
                     row.Cells[1].Value = PriceNew * Convert.ToDouble(row.Cells[0].Value.ToString());
+                }
                 countRow++;
             }
+            listBox1.Items.Add("asdasd");
         }
 
         // Необходимо для ввода только цифровых значений в 1 колонку второй таблицы
@@ -134,6 +141,12 @@ namespace Beer_Pub
                 if ((e.KeyChar != (char)Keys.Back) || (e.KeyChar != (char)Keys.Delete))
                 { e.Handled = true; }
             }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            listBox1.Items.Clear();
+            listBox1.Items.Add("Вы очистили список.");
         }
     }
 }
