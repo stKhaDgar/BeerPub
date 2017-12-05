@@ -108,16 +108,40 @@ namespace Beer_Pub
         {
             listBox1.Items.Clear();
             int countRow = 0;
+            double priceAll = 0;
             foreach (DataGridViewRow row in dataGridView2.Rows)
             {
                 if (Convert.ToDouble(row.Cells[0].Value.ToString()) != 0)
                 {
                     double PriceNew = Convert.ToDouble(dataGridView1.Rows[countRow].Cells[3].Value.ToString());
                     row.Cells[1].Value = PriceNew * Convert.ToDouble(row.Cells[0].Value.ToString());
+
+                    // Удаление символов из строки "Объём"
+                    char[] mass = dataGridView1.Rows[countRow].Cells[2].Value.ToString().ToCharArray();
+                    string numberSize = "";
+                    foreach(char h in mass)
+                    {
+                        if(char.IsDigit(h) == true)
+                        {
+                            numberSize += h;
+                        }
+                    }
+                    // Добавление нового айтема в лист
+                    listBox1.Items.Add(dataGridView1.Rows[countRow].Cells[1].Value.ToString() + "    -    " + Convert.ToDouble(row.Cells[0].Value.ToString()) * Convert.ToDouble(numberSize) + "    -    " + row.Cells[1].Value.ToString());
+                    
+                    priceAll += Convert.ToDouble(row.Cells[1].Value.ToString());
+                    label2.Text = " =       " + priceAll.ToString();
+                }
+                else if (Convert.ToDouble(row.Cells[0].Value.ToString()) == 0)
+                {
+                    row.Cells[1].Value = null;
                 }
                 countRow++;
             }
-            listBox1.Items.Add("asdasd");
+            if (listBox1.Items.Count == 0)
+            {
+                listBox1.Items.Add("Вы ничего не выбрали.");
+            }
         }
 
         // Необходимо для ввода только цифровых значений в 1 колонку второй таблицы
@@ -147,6 +171,12 @@ namespace Beer_Pub
         {
             listBox1.Items.Clear();
             listBox1.Items.Add("Вы очистили список.");
+            foreach (DataGridViewRow row in dataGridView2.Rows)
+            {
+                row.Cells[0].Value = 0;
+                row.Cells[1].Value = null;
+            }
+            label2.Text = "";
         }
     }
 }
